@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import {auth} from "@/lib/butter-auth/auth";
+import {headers} from "next/headers";
+import {redirect} from "next/navigation";
 
-export default function Layout({ children } : { children : React.ReactNode}) {
+const Layout = async ({ children } : { children : React.ReactNode}) => {
+    const session = await auth.api.getSession({ headers: await headers() })
+    if(session?.user) redirect('/')
     return (
         <main className="min-h-screen text-gray-400">
             <main className="auth-layout">
@@ -39,3 +44,5 @@ export default function Layout({ children } : { children : React.ReactNode}) {
         </main>
     );
 }
+
+export default Layout;

@@ -130,6 +130,11 @@ signalist/
 ├── postcss.config.js          # PostCSS configuration
 ├── README.md                  # This file
 ├── tailwind.config.js         # Tailwind CSS configuration
+```bash
+# To run the app.
+npm run dev
+# To run the inngest
+npx inngest-cli@latest dev
 ```
 
 ## 📸 Screenshots

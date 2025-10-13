@@ -92,7 +92,10 @@ Signalist is a cutting-edge web application designed to provide users with a per
     ```
 
 2.  **Open your browser:** Navigate to `http://localhost:3000` to view the application.
-3. 
+3.  **To run Innegest:**
+    ```
+    npx inngest-cli@latest dev
+    ```
 
 ## 📂 Project Structure
 

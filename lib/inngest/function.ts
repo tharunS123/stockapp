@@ -14,21 +14,24 @@ export const sendSignUpEmail = inngest.createFunction(
         `
         const prompt = PERSONALIZED_WELCOME_EMAIL_PROMPT.replace('{{userProfile}}', userProfile)
 
-        const response = await step.ai.infer('generate-welcome-intro', {
-            model: step.ai.models.gemini({ model: 'gemini-2.0-flash' }),
-            body: {
-                contents: [
-                    {
-                        role: 'user',
-                        parts: [
-                            { text: prompt }
-                        ]
-                    }]
-            }
-        })
+        const response = await step.ai.infer("generate-welcome-intro", {
+          model: step.ai.models.openai({
+            model: "nvidia/nemotron-nano-9b-v2:free",
+            apiKey: process.env.OPENROUTER_API_KEY!,
+            baseUrl: "https://openrouter.ai/api/v1/",
+          }),
+          body: {
+            messages: [
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+          },
+        });
         await step.run('send-welcome-email', async () => {
-            const part = response.candidates?.[0]?.content?.parts?.[0];
-            const introText = (part && 'text' in part ? part.text : null) ||'Thanks for joining Signalist. You now have the tools to track markets and make smarter moves.'
+            const choice = response.choices?.[0];
+            const introText = choice?.message?.content || 'Thanks for joining Signalist. You now have the tools to track markets and make smarter moves.'
 
             const { data: { email, name } } = event;
             return await sendWelcomeEmail({ email, name, intro: introText });
